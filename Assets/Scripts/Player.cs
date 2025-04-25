@@ -17,11 +17,15 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         moveCoroutine = StartCoroutine(Move());
+        dashCoroutine = StartCoroutine(Dash());
         ballon.SetActive(false);
     }
     void Update()
     {
-
+        if (Input.GetKeyDown(KeyCode.C) && dashCoroutine == null)
+        {
+            dashCoroutine = StartCoroutine(Dash());
+        }
     }
     IEnumerator Move()
     {
@@ -71,6 +75,11 @@ public class Player : MonoBehaviour
             }
             yield return null;
         }
+    }
+    IEnumerator Dash()
+    {
+
+        yield return null;
     }
     void OnCollisionEnter2D(Collision2D collision)
     {
