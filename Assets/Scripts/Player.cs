@@ -1,8 +1,8 @@
 using System.Collections;
 using UnityEngine;
-
 public class Player : MonoBehaviour
 {
+    [SerializeField] public GameObject ballon;
     Rigidbody2D rb;
     float moveSpeed = 3;
     float stopSlideFactor = 1.05f;
@@ -11,11 +11,13 @@ public class Player : MonoBehaviour
     bool isGrounded = false;
     bool doubleJump = false;
     Coroutine moveCoroutine;
+    Coroutine dashCoroutine;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         moveCoroutine = StartCoroutine(Move());
+        ballon.SetActive(false);
     }
     void Update()
     {
@@ -37,15 +39,35 @@ public class Player : MonoBehaviour
             {
                 rb.velocity = new Vector2(rb.velocity.x / stopSlideFactor, rb.velocity.y);
             }
-
             allowJump = isGrounded || doubleJump;
             if (Input.GetKeyDown(KeyCode.W) && allowJump)
             {
-                rb.velocity = new Vector2(rb.velocity.x,jumpPower);
+                rb.velocity = new Vector2(rb.velocity.x, jumpPower);
                 if (doubleJump)
                 {
                     doubleJump = false;
                 }
+            }
+            if (Input.GetKeyDown(KeyCode.E) && !isGrounded && rb.velocity.y < 0)
+            {
+                rb.velocity = new Vector2(rb.velocity.x,0);
+            }
+            if (Input.GetKey(KeyCode.E) && !isGrounded)
+            {
+                ballon.SetActive(true);
+                if (rb.velocity.y < 0)
+                {
+                    rb.gravityScale = 0.2f;
+                }
+                else
+                {
+                    rb.gravityScale = 1;
+                }
+            }
+            else
+            {
+                rb.gravityScale = 1;
+                ballon.SetActive(false);
             }
             yield return null;
         }
@@ -54,7 +76,7 @@ public class Player : MonoBehaviour
     {
         if (collision.gameObject.tag == "Ground")
         {
-            isGrounded =  true;
+            isGrounded = true;
             doubleJump = false;
         }
     }
