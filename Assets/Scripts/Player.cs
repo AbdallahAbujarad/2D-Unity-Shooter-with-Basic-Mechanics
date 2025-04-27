@@ -6,10 +6,13 @@ public class Player : MonoBehaviour
     Rigidbody2D rb;
     float moveSpeed = 3;
     float stopSlideFactor = 1.05f;
-    float jumpPower = 7;
+    float jumpPower = 4;
+    float ballonFallDownVelocity = -2;
+    float dashPower = 8;
     bool allowJump = false;
     bool isGrounded = false;
     bool doubleJump = false;
+    bool movingRight = true;
     Coroutine moveCoroutine;
     Coroutine dashCoroutine;
     void Start()
@@ -17,7 +20,6 @@ public class Player : MonoBehaviour
         rb = GetComponent<Rigidbody2D>();
         rb.constraints = RigidbodyConstraints2D.FreezeRotation;
         moveCoroutine = StartCoroutine(Move());
-        dashCoroutine = StartCoroutine(Dash());
         ballon.SetActive(false);
     }
     void Update()
@@ -29,15 +31,21 @@ public class Player : MonoBehaviour
     }
     IEnumerator Move()
     {
+        if (dashCoroutine != null)
+        {
+            dashCoroutine = null;
+        }
         while (true)
         {
             if (Input.GetKey(KeyCode.D))
             {
                 rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
+                movingRight = true;
             }
             else if (Input.GetKey(KeyCode.A))
             {
                 rb.velocity = new Vector2(-moveSpeed, rb.velocity.y);
+                movingRight = false;
             }
             else
             {
@@ -52,16 +60,13 @@ public class Player : MonoBehaviour
                     doubleJump = false;
                 }
             }
-            if (Input.GetKeyDown(KeyCode.E) && !isGrounded && rb.velocity.y < 0)
-            {
-                rb.velocity = new Vector2(rb.velocity.x,0);
-            }
             if (Input.GetKey(KeyCode.E) && !isGrounded)
             {
                 ballon.SetActive(true);
                 if (rb.velocity.y < 0)
                 {
-                    rb.gravityScale = 0.2f;
+                    rb.gravityScale = 0;
+                    rb.velocity = new Vector2(rb.velocity.x, ballonFallDownVelocity);
                 }
                 else
                 {
@@ -78,7 +83,19 @@ public class Player : MonoBehaviour
     }
     IEnumerator Dash()
     {
-
+        rb.gravityScale = 0;
+        if (movingRight)
+        {
+            rb.velocity = new Vector2(dashPower,0);
+        }
+        else
+        {
+            rb.velocity = new Vector2(-dashPower,0);
+        }
+        StopCoroutine(moveCoroutine);
+        yield return new WaitForSeconds(0.2f);
+        rb.gravityScale = 1;
+        moveCoroutine = StartCoroutine(Move());
         yield return null;
     }
     void OnCollisionEnter2D(Collision2D collision)
