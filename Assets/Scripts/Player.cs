@@ -9,12 +9,15 @@ public class Player : MonoBehaviour
     float jumpPower = 4;
     float ballonFallDownVelocity = -2;
     float dashPower = 8;
+    float dashCoolDown = 0.8f;
     bool allowJump = false;
     bool isGrounded = false;
     bool doubleJump = false;
     bool movingRight = true;
     Coroutine moveCoroutine;
     Coroutine dashCoroutine;
+    Coroutine wallJumpCouroutine;
+    bool allowDash = true;
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
@@ -24,10 +27,15 @@ public class Player : MonoBehaviour
     }
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.C) && dashCoroutine == null)
+        if (Input.GetKeyDown(KeyCode.C) && dashCoroutine == null && allowDash)
         {
             dashCoroutine = StartCoroutine(Dash());
         }
+    }
+    IEnumerator DashCoolDown()
+    {
+        yield return new WaitForSeconds(dashCoolDown);
+        allowDash = true;
     }
     IEnumerator Move()
     {
@@ -96,6 +104,8 @@ public class Player : MonoBehaviour
         yield return new WaitForSeconds(0.2f);
         rb.gravityScale = 1;
         moveCoroutine = StartCoroutine(Move());
+        StartCoroutine(DashCoolDown());
+        allowDash = false;
         yield return null;
     }
     void OnCollisionEnter2D(Collision2D collision)
