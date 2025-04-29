@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 public class Player : MonoBehaviour
 {
@@ -10,10 +11,13 @@ public class Player : MonoBehaviour
     float ballonFallDownVelocity = -2;
     float dashPower = 8;
     float dashCoolDown = 0.8f;
+    float wallRotationFactor = 15;
     bool allowJump = false;
     bool isGrounded = false;
     bool doubleJump = false;
+    bool onWall = false;
     bool movingRight = true;
+    int wallDirection;
     Coroutine moveCoroutine;
     Coroutine dashCoroutine;
     Coroutine wallJumpCouroutine;
@@ -39,6 +43,8 @@ public class Player : MonoBehaviour
     }
     IEnumerator Move()
     {
+        rb.gravityScale = 1;
+        transform.rotation = Quaternion.identity;
         if (dashCoroutine != null)
         {
             dashCoroutine = null;
@@ -86,6 +92,12 @@ public class Player : MonoBehaviour
                 rb.gravityScale = 1;
                 ballon.SetActive(false);
             }
+            if (onWall && !isGrounded)
+            {
+                wallJumpCouroutine = StartCoroutine(WallJump());
+                moveCoroutine = null;
+                yield break;
+            }
             yield return null;
         }
     }
@@ -94,11 +106,11 @@ public class Player : MonoBehaviour
         rb.gravityScale = 0;
         if (movingRight)
         {
-            rb.velocity = new Vector2(dashPower,0);
+            rb.velocity = new Vector2(dashPower, 0);
         }
         else
         {
-            rb.velocity = new Vector2(-dashPower,0);
+            rb.velocity = new Vector2(-dashPower, 0);
         }
         StopCoroutine(moveCoroutine);
         yield return new WaitForSeconds(0.2f);
@@ -107,6 +119,35 @@ public class Player : MonoBehaviour
         StartCoroutine(DashCoolDown());
         allowDash = false;
         yield return null;
+    }
+    IEnumerator WallJump()
+    {
+        while (true)
+        {
+            if (rb.velocity.y < 0)
+            {
+                rb.gravityScale = 0;
+                rb.velocity = new Vector2(rb.velocity.x, -2);
+                transform.rotation = Quaternion.Euler(0, 0, wallDirection * wallRotationFactor);
+            }
+            if (isGrounded)
+            {
+                rb.velocity = new Vector2(0, 0);
+                moveCoroutine = StartCoroutine(Move());
+                wallJumpCouroutine = null;
+                yield break;
+            }
+            if (Input.GetKeyDown(KeyCode.W))
+            {
+                rb.gravityScale = 1;
+                rb.AddForce(new Vector2(moveSpeed * -wallDirection, jumpPower), ForceMode2D.Impulse);
+                yield return new WaitForSeconds(1);
+                moveCoroutine = StartCoroutine(Move());
+                wallJumpCouroutine = null;
+                yield break;
+            }
+            yield return null;
+        }
     }
     void OnCollisionEnter2D(Collision2D collision)
     {
@@ -122,6 +163,29 @@ public class Player : MonoBehaviour
         {
             isGrounded = false;
             doubleJump = true;
+        }
+    }
+    void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Right Trigger" || collision.gameObject.tag == "Left Trigger")
+        {
+            onWall = true;
+            if (collision.gameObject.tag == "Right Trigger")
+            {
+                wallDirection = 1;
+            }
+            else
+            {
+                wallDirection = -1;
+            }
+        }
+    }
+    void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.tag == "Right Trigger" || collision.gameObject.tag == "Left Trigger")
+        {
+            transform.rotation = quaternion.identity;
+            onWall = false;
         }
     }
 }
