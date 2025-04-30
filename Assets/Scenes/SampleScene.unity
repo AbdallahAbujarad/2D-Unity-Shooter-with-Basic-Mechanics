@@ -202,7 +202,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.02442813, y: -4.8, z: 0}
-  m_LocalScale: {x: 6.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 17.42, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -262,7 +262,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5504170419419512552, guid: 394190f14f01c634b9b9c120a37872cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.3932476
+      value: -8.643248
       objectReference: {fileID: 0}
     - target: {fileID: 5504170419419512552, guid: 394190f14f01c634b9b9c120a37872cd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -389,7 +389,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.02442813, y: 4.95, z: 0}
-  m_LocalScale: {x: 6.5, y: 0.5, z: 1}
+  m_LocalScale: {x: 17.42, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -800,7 +800,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 5504170419419512552, guid: 394190f14f01c634b9b9c120a37872cd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.3567524
+      value: 8.606752
       objectReference: {fileID: 0}
     - target: {fileID: 5504170419419512552, guid: 394190f14f01c634b9b9c120a37872cd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -914,6 +914,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ballon: {fileID: 2045091030}
+  stopSlideFactor: 1.05
 --- !u!70 &1217856835
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
