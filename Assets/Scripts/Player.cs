@@ -6,7 +6,7 @@ public class Player : MonoBehaviour
     [SerializeField] public GameObject ballon;
     Rigidbody2D rb;
     float moveSpeed = 3;
-    float stopSlideFactor = 1.05f;
+    public float stopSlideFactor = 1.05f;
     float jumpPower = 4;
     float ballonFallDownVelocity = -2;
     float dashPower = 8;
@@ -65,6 +65,10 @@ public class Player : MonoBehaviour
             {
                 rb.velocity = new Vector2(rb.velocity.x / stopSlideFactor, rb.velocity.y);
             }
+            if (onWall)
+            {
+                doubleJump = false;
+            }
             allowJump = isGrounded || doubleJump;
             if (Input.GetKeyDown(KeyCode.W) && allowJump)
             {
@@ -113,6 +117,7 @@ public class Player : MonoBehaviour
             rb.velocity = new Vector2(-dashPower, 0);
         }
         StopCoroutine(moveCoroutine);
+        moveCoroutine = null;
         yield return new WaitForSeconds(0.2f);
         rb.gravityScale = 1;
         moveCoroutine = StartCoroutine(Move());
@@ -122,8 +127,14 @@ public class Player : MonoBehaviour
     }
     IEnumerator WallJump()
     {
+        if (moveCoroutine != null)
+        {
+            StopCoroutine(moveCoroutine);
+            moveCoroutine =null;
+        }
         while (true)
         {
+            doubleJump = false;
             if (rb.velocity.y < 0)
             {
                 rb.gravityScale = 0;
@@ -137,11 +148,12 @@ public class Player : MonoBehaviour
                 wallJumpCouroutine = null;
                 yield break;
             }
-            if (Input.GetKeyDown(KeyCode.W))
+            if (Input.GetKeyDown(KeyCode.W) && rb.gravityScale != 1)
             {
                 rb.gravityScale = 1;
-                rb.AddForce(new Vector2(moveSpeed * -wallDirection, jumpPower), ForceMode2D.Impulse);
-                yield return new WaitForSeconds(1);
+                rb.AddForce(new Vector2(moveSpeed * -wallDirection, jumpPower) * 1.5f, ForceMode2D.Impulse);
+                transform.rotation = Quaternion.identity;
+                yield return new WaitForSeconds(0.3f);
                 moveCoroutine = StartCoroutine(Move());
                 wallJumpCouroutine = null;
                 yield break;
