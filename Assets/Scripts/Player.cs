@@ -6,14 +6,14 @@ public class Player : MonoBehaviour
     [SerializeField] public GameObject ballon;
     Rigidbody2D rb;
     float moveSpeed = 3;
-    public float stopSlideFactor = 1.05f;
-    float jumpPower = 4;
+    float stopSlideFactor = 1.05f;
+    float jumpPower = 5;
     float ballonFallDownVelocity = -2;
     float dashPower = 8;
     float dashCoolDown = 0.8f;
     float wallRotationFactor = 15;
     bool allowJump = false;
-    bool isGrounded = false;
+    public static bool isGrounded = false;
     bool doubleJump = false;
     bool onWall = false;
     bool movingRight = true;
