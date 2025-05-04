@@ -127,10 +127,12 @@ public class Player : MonoBehaviour
     }
     IEnumerator WallJump()
     {
+        allowDash = false;
         if (moveCoroutine != null)
         {
             StopCoroutine(moveCoroutine);
-            moveCoroutine =null;
+            moveCoroutine = null;
+            allowDash = false;
         }
         while (true)
         {
@@ -156,6 +158,7 @@ public class Player : MonoBehaviour
                 yield return new WaitForSeconds(0.3f);
                 moveCoroutine = StartCoroutine(Move());
                 wallJumpCouroutine = null;
+                allowDash = true;
                 yield break;
             }
             yield return null;

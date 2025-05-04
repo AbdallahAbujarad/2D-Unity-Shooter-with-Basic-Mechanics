@@ -9,6 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7732894614739402951}
+  - component: {fileID: 3146783585519959121}
+  - component: {fileID: 2059113489812587749}
   m_Layer: 0
   m_Name: Bullet Spawner
   m_TagString: Untagged
@@ -31,6 +33,32 @@ Transform:
   m_Children: []
   m_Father: {fileID: 2544698252044997616}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3146783585519959121
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 194700916038886227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff40f20d8b1b7ee41aed98e797551656, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 0}
+--- !u!114 &2059113489812587749
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 194700916038886227}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff40f20d8b1b7ee41aed98e797551656, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  bulletPrefab: {fileID: 5604848392478401224, guid: 54b2c5c00df52a240aef686b1c0ae890, type: 3}
 --- !u!1 &437658493472599501
 GameObject:
   m_ObjectHideFlags: 0
@@ -409,6 +437,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2544698252044997616}
+  - component: {fileID: 7994906218115193917}
   m_Layer: 0
   m_Name: Gun Holder
   m_TagString: Untagged
@@ -433,6 +462,18 @@ Transform:
   - {fileID: 7732894614739402951}
   m_Father: {fileID: 909933585454189732}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7994906218115193917
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6801158972151927329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e23ef84acfac1ed408ab11a610471c1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &8618683085729736336
 GameObject:
   m_ObjectHideFlags: 0
